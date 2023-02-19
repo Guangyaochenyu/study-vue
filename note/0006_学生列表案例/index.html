@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./static/js/vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <button @click="add">添加学生</button>
+    <button @click="del">删除学生</button>
+    <table border="1" width="50%" style="border-collapse: collapse;" align="center">
+      <tr><th v-for="item in list_head">{{item}}</th></tr>
+      <tr align="center" v-for="item in list">
+        <td>{{ item.grade | grade }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.gender | isMale }}</td>
+        <td>{{ item.age | isAudit }}</td>
+      </tr>
+    </table>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        list_head: ['班级', '姓名', '性别', '年龄'],
+        list: [
+          // grade: 1-5, name 中文， gender M/F, age 15-20
+          {grade: 1, name: '张三', gender: 'M', age: 18},
+          {grade: 2, name: '小梅', gender: 'F', age: 17},
+          {grade: 1, name: '高启强', gender: 'M', age: 20},
+          {grade: 3, name: '高启盛', gender: 'M', age: 19},
+          {grade: 2, name: '高启兰', gender: 'F', age: 17},
+        ]
+      },
+      methods: {
+        add () {
+          this.list.push(
+            {
+              grade: parseInt( Math.random() * 5 + 1),
+              name: '同学'+(this.list.length+1), 
+              gender: Math.random() >= 0.5 ? 'M' : 'F',
+              age: parseInt( Math.random() * 5 + 15),
+            },
+          )
+        },
+        del () {
+          this.list.pop();
+        }
+      },
+      filters: {
+        isAudit (val) { return val >= 18 ? '成年' : '未成年' },
+        isMale (val) { return val == 'M' ? '男' : '女' },
+        grade (val) { return val == 1 ? '一年级' : val == 2 ? '二年级' : val == 3 ? '三年级' : val == 4 ? '四年级' : val == 5 ? '五年级' : '未知'},
+      }
+    });
+  </script>
+</body>
+</html>

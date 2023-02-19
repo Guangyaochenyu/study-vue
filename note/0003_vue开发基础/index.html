@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./static/js/vue.min.js"></script>
+</head>
+<body>
+  <!-- 定义唯一根元素div -->
+  <div id="app">
+    <!-- 使用Vue实例中的数据 -->
+    <p v-bind:id="dataId | formatID" @click="fun_click">{{ message | toUpperCase | toLowerCase }}</p>
+    <p>总价格: {{ totalPrice }}</p>
+    <p>单价: {{ price }}</p>
+    <p>数量: {{ count }}</p>
+    <div>
+      <button @click="count == 0 ? count = 0 : count--">减少</button>
+      <button @click="count++">增加</button>
+    </div>
+    <!-- input 中的 v-model 用于在表单控件元素上创建双向数据绑定 -->
+    <p><input type="text" v-model="input"></p>
+
+  </div>
+  <script>
+    // 选项：
+    //   data:           Vue 实例数据对象
+    //   method:         定义 Vue实例中的方法
+    //   components:     定义子组件
+    //   computed:       计算属性
+    //   filters:        过滤器
+    //   el:             指定 Vue 实例挂载的元素
+    //   watch:          监听数据变化
+    var vm = new Vue({
+      // 在创建Vue实例时, class或id选择器可用来将页面结构与实例对象中的el绑定。
+      el: '#app',
+      // Vue 实例的数据对象为 data, Vue 会将 data 中的属性转化为 getter/setter, 从而实现数据响应式。
+      data: {
+        message: 'shopping cart',
+        price: 24,
+        count: 0,
+        input: 'Harbin',
+        dataId: 'v-bind',
+      },
+      // methods: 定义 Vue实例中的方法， 通过 Vue 实例可以直接访问这些方法。在定义的方法中, this 指向 Vue 实例本身。
+      methods: {
+        fun_click: () => { console.log('点击购物车'); }
+      },
+      computed: {
+        totalPrice () { return this.price * this.count},
+      },
+      // watch: Vue 中的时间处理方法是根据用户所需自行定义的。Vue 实例提供了一个 watch 选项，该选项提供了一种机制，当数据发生变化时，执行相应的操作。
+      watch:{
+        input ( old_val, new_val ) { console.log(old_val, new_val); },
+      },
+      // filters: 页面中的数据经常需要进行格式化，Vue.js 允许你自定义过滤器，可被用作一些常见的文本格式化。过滤器可以用在两个地方：双花括号插值和 v-bind 表达式。
+      filters: {
+        toUpperCase ( val ) { return val ? val.toUpperCase() : ''; },
+        toLowerCase ( val ) { return val ? val.toLowerCase() : ''; },
+        formatID ( val ) { return val ? 'id-' + val : ''; },
+      },
+    });
+    
+    console.log(vm.$data.message);
+    console.log(vm.message);
+    
+  </script>
+</body>
+</html>

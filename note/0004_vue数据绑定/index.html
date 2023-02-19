@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./static/js/vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- 绑定样式属性值 -->
+    <div v-bind:style="{background: pink, width: width, height: height}">{{ content }}</div>
+    <hr>
+    <!-- 绑定样式对象 -->
+    <div v-bind:style="style">{{ content }}</div>
+    <hr>
+    <!-- 绑定样式类 -->
+    <div v-bind:class="inner">{{ content }}</div>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        style: {background: 'pink', width: '100%', height: '200px',},
+        pink: 'pink',
+        width: '100%',
+        height: '200px',
+        content: '绑定样式',
+        inner: 'inner',
+      },
+    })
+  </script>
+</body>
+</html>

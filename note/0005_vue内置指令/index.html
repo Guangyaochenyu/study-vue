@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./static/js/vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <input type="text" v-model="msg">
+    <div v-text="text"></div>
+    <div v-text="html"></div><!-- v-text 会将html标签转义 -->
+    <div v-html="html"></div>
+    <div>
+      <input type="text" v-bind:value="bind">
+    </div>
+    <div v-on:click="fun_click">{{ on }}</div>
+    <div @click="fun_click">{{ on }}</div>
+    
+    <div>
+      <table border="1">
+        <tr>
+          <th v-for="item in list_head">{{ item }}</th>
+        </tr>
+        <tr v-for="item in list">
+          <td>{{ item.name }}</td>
+          <td>{{ item.age }}</td>
+        </tr>
+      </table>
+    </div>
+    <div v-if="isShow" style="background: #ccc">v-if 指令</div>
+    <div @click="fun_show">显示/隐藏</div>
+
+  </div>
+  
+  
+  
+  
+  <script>
+    // vue 内置指令
+    // v-model: 双向数据绑定
+    // v-on: 监听事件
+    // v-bind: 单向数据绑定
+    // v-text: 插入文本内容
+    // v-html: 插入包含html内容
+    // v-for: 列表渲染
+    // v-if: 条件渲染
+    // v-show: 显示渲染
+
+    // 内置指令存在简写方式, 例如:
+    // v-on:click -> @click
+    // v-bind:style -> :style
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        msg: 'v-model 指令',
+        text: 'v-text 指令',
+        html: '<h1>v-html 指令</h1>',
+        bind: 'v-bind 指令',
+        on: 'v-on 指令',
+        count: 0,
+        list_head: ['姓名', '年龄'],
+        list: [{name: '张三', age: 18}, {name: '李四', age: 19}, {name: '王五', age: 20},],
+        isShow: true,
+      },
+      methods: {
+        fun_click: function() {
+          this.on = 'v-on 指令 被点击了' + ++this.count + '次';
+        },
+        fun_show: function() {
+          this.isShow = !this.isShow;
+        }
+      },
+    });
+  </script>
+</body>
+</html>
