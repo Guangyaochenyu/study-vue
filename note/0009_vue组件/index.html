@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./static/js/vue.min.js"></script>
+</head>
+<body>
+  
+  <div id="app">
+    <p>{{ title }}</p>
+    <my-component1></my-component1>
+    <my-component2></my-component2>
+    <!-- props 传值, 用来接受父组件中定义的数据, -->
+    <my-component3 name="组件3"></my-component3>
+    <parent></parent>
+    <hr>
+    <div>
+      <a href="#" @click.prevent="flag?flag:flag=!flag">登录</a>
+      <a href="#" @click.prevent="flag?flag=!flag:flag">注册</a>
+      <login v-if="flag"></login>
+      <register v-else="flag"></register>
+    </div>
+  </div>
+  <template id="tmp">
+    <div>
+      <p>{{ title }}</p>
+      <button @click="count++">我是组件2, 被单击{{count}}次</button>
+    </div>    
+  </template>
+  <template id="child">
+    <div>
+      <button @click="click">Send</button>
+      <input type="text" v-model="message1">
+    </div>
+  </template>
+  <script>
+    Vue.component('my-component1', {
+      template: '<button @click="count++">我是组件1, 被单击{{count}}次</button>',
+      data () {return {count: 0,}},
+    });
+    Vue.component('my-component3', {
+      props: ['name'],
+      template: '<button @click="count++">我是{{name}}, 被单击{{count}}次</button>',
+      data () {return {count: 0,}},
+    });
+    var component = {
+      template: '#tmp',
+      data () {return {
+        count: 0,
+        title: '我是组件实例的标题',
+      }},
+    };
+    Vue.component('parent', {
+      template: '<div><child @childFn="transContent"></child> 子组件传来的内容: {{message2}}</div>',
+      data () {return {message2: '',}},
+      methods: {
+        transContent (msg) {this.message2 = msg;},
+      }
+    });
+    Vue.component('child', {
+      template: '#child',
+      data () { return {message1: '',}},
+      methods: {
+        click () {this.$emit('childFn', this.message1);},
+      },
+    });
+    Vue.component('login', {
+      template: '<div>登录页面</div>',
+    });
+    Vue.component('register', {
+      template: '<div>注册页面</div>',
+    });
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        title: '我是 vm 实例的标题',
+        flag: false,
+      },
+      methods: {},
+      components: {'p‘': component,},
+    });
+  </script>
+</body>
+</html>

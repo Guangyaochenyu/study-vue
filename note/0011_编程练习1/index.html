@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./static/js/vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div>
+      {{ app_title }}
+      <a href="#" @click.prevent="app_list_index = 0">{{ app_list[0].title }}</a>
+      <a href="#" @click.prevent="app_list_index = 1">{{ app_list[1].title }}</a>
+      <hr>
+    </div>
+    <div v-for="(item, index) in app_list" :key="index" v-if="app_list_index == index" v-bind:id="item.id | formatID">
+      {{ item.title }}
+    </div>
+    <div v-if="app_list_index == 0">
+      <app_01></app_01>
+    </div>
+    <div v-if="app_list_index == 1">
+      <app_02></app_02>
+    </div>
+
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        app_title: '编程练习1',
+        app_list: [
+          {title: '比较两个数字大小',id: '001',},
+          {title: '简单的网页计算器',id: '002',},
+        ],
+        app_list_index: 0,
+      },
+      method: {},
+      filters: {
+        formatID ( val ) { return val ? 'id_' + val : 'id_unknown'; },
+      },
+      components: {
+        'app_01': {
+          template: `
+            <div>
+              <table>
+                <tr v-for="(item, index) in num" :key="index">
+                  <td><label v-bind:for="item.id">{{ item.id }}</label></td>
+                  <td>
+                    <input 
+                      v-bind:id="item.id" 
+                      v-bind:type="item.type"
+                      v-model.number="item.value"
+                      @change="compare"
+                    >
+                  </td>
+                </tr>
+                <tr @click="compare">
+                  <td><label for="result">result:</label></td>
+                  <td><input id="result" v-model="result" type="text" disabled></td>
+                </tr>
+              </table>
+            </div>
+          `,
+          data() {
+            return {
+              num: [
+                {id: 'num1',value: '',type: 'text',},
+                {id: 'num2',value: '',type: 'text',}
+              ],
+              result: '点击按钮比较',
+            };
+          },
+          methods: {
+            compare() {
+              num1 = this.num[0].value;
+              num2 = this.num[1].value;
+              // 格式检查 & 非空检查
+              if (num1 == '' || num2 == ''){this.result = '输入不能为空'; return;}
+              if (isNaN(num1)){this.result = 'num1 不是数字'; return;}
+              if (isNaN(num2)){this.result = 'num2 不是数字'; return;}
+              // 比较
+              if (num1 > num2) {this.result = 'num1 大于 num2';}
+              else if (num1 < num2) {this.result = 'num1 小于 num2';}
+              else {this.result = 'num1 等于 num2';}
+              return;
+            },
+          },
+        },
+        'app_02': {
+          template: `
+            <div>
+              <table>
+                <tr>
+                  <td><label for="num1">num1:</label></td>
+                  <td><input id="num1" v-model.number="num1" type="text"></td>
+                </tr>
+                <tr>
+                  <td><label for="num2">num2:</label></td>
+                  <td><input id="num2" v-model.number="num2" type="text"></td>
+                </tr>
+                <tr>
+                  <td><label for="result">result:</label></td>
+                  <td><input id="result" v-model="result" type="text" disabled></td>
+                </tr>
+                <tr>
+                  <td><label for="operator">operator:</label></td>
+                  <td>
+                    <select id="operator" v-model="operator">
+                      <option value="add">+</option>
+                      <option value="sub">-</option>
+                      <option value="mul">*</option>
+                      <option value="div">/</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td><button @click="calculate">计算</button></td>
+                  <td><button @click="clear">清空</button></td>
+                </tr>
+              </table>
+            </div>
+          `,
+          data() {
+            return {
+              num1: '',
+              num2: '',
+              result: '',
+              operator: 'add',
+            };
+          },
+          methods: {
+            calculate() {
+              // 格式检查 & 非空检查
+              if (this.num1 == '' || this.num2 == ''){this.result = '输入不能为空'; return;}
+              if (isNaN(this.num1)){this.result = 'num1 不是数字'; return;}
+              if (isNaN(this.num2)){this.result = 'num2 不是数字'; return;}
+              // 计算
+              switch (this.operator) {
+                case 'add':
+                  this.result = this.num1 + this.num2;
+                  break;
+                case 'sub':
+                  this.result = this.num1 - this.num2;
+                  break;
+                case 'mul':
+                  this.result = this.num1 * this.num2;
+                  break;
+                case 'div':
+                  this.result = this.num1 / this.num2;
+                  break;
+                default:
+                  this.result = '未知操作符';
+                  break;
+              }
+              return;
+            },
+            clear() {
+              this.num1 = '';
+              this.num2 = '';
+              this.result = '';
+              this.operator = 'add';
+            },
+          },
+        }
+      },
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./static/js/vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div><span @click="random = Math.random() ">随机字符串:</span>{{ random }}</div>
+    <div><input type="text" @keyup.enter=" submit " @keyup.up=" random = Math.random() " v-model="random"></div>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        random: 0,
+      },
+      methods: {
+        submit: function () { console.log('submit:' + this.random ); }
+      }
+    });
+  </script>
+</body>
+</html>

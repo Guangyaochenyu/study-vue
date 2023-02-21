@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./static/js/vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div @click="doParent">
+      <button @click="doChild">事件冒泡</button>
+      <button @click.stop="doChild">阻止冒泡</button>
+    </div>
+    <div>
+      <a href="https://www.baidu.com" @click.prevent>阻止默认事件</a>
+      <a href="https://www.baidu.com">不阻止默认事件</a>
+    </div>
+    <div>
+      <div @click.capture="doParent">
+        <button @click="doChild">捕获模式</button>
+      </div>
+    </div>
+    <div>
+      <div v-bind:style="style1" @click.self="doParent">a
+        <div v-bind:style="style2" @click="doChild">b</div>
+      </div>
+      <div v-bind:style="style1" @click="doParent">c
+        <div v-bind:style="style2" @click.self="doChild">d</div>
+      </div>
+    </div>
+    <div>
+      <button @click.once="doOnce">只触发一次</button>
+    </div>
+  </div>
+  <script>
+    // 事件修饰符是自定义事件行为, 配合 v-on 指令使用, 写在事件之后, 以点号分隔
+    // .stop 阻止冒泡
+    // .prevent 阻止默认事件
+    // .capture 捕获模式
+    // .self 只有事件在该元素本身触发时才触发
+    // .once 只触发一次
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        message: "Hello World",
+        style1: {width: '80px', height: '80px', background: '#aaa', margin: '10px'},
+        style2: {width: '40px', height: '40px', background: '#ccc', }
+      },
+      methods: {
+        doParent: function() { console.log('父元素单击事件'); },
+        doChild: function() { console.log('子元素单击事件'); },
+        doOnce: function() { console.log('只触发一次'); },
+      }
+    });
+  </script>
+</body>
+</html>
